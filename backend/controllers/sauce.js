@@ -3,20 +3,29 @@ const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
-
     const sauce = new Sauce({
-        userId: sauceObject.userId,
-        name: sauceObject.name,
-        manufacturer: sauceObject.manufacturer,
-        description: sauceObject.description,
-        imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
-        mainPepper: sauceObject.mainPepper,
-        heat: sauceObject.heat,
+        ...sauceObject,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        likes : 0,
+        dislikes :0,
+        usersDisliked:[],
+        usersLiked: []
     });
-    sauce.save()
-        .then(() => res.status(201).json({ message: "Sauce enregistrée !" }))
-        .catch(error => res.status(400).json({ error }));
-}
+   
+    sauce.save().then(
+        () => {
+            res.status(201).json({
+                message: 'Sauce ajoutée avec succès'
+            });
+        }
+    ).catch(
+        (error) => {res.status(400).json({
+                error: error
+            });
+        }
+    );
+};
+
 
 exports.modifySauce = (req, res, next) => {
     const sauceObject = req.file ?

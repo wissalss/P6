@@ -1,29 +1,28 @@
 const Sauce = require('../models/sauce');
 const fs = require('fs');
 
+const multer = require('multer');
+const path = require('path');
+
+
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     const sauce = new Sauce({
         ...sauceObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        likes : 0,
-        dislikes :0,
-        usersDisliked:[],
+        likes: 0,
+        dislikes: 0,
+        usersDisliked: [],
         usersLiked: []
     });
-   
-    sauce.save().then(
-        () => {
-            res.status(201).json({
-                message: 'Sauce ajoutée avec succès'
-            });
-        }
-    ).catch(
-        (error) => {res.status(400).json({
-                error: error
-            });
-        }
-    );
+
+    sauce.save()
+        .then(() => {
+            res.status(201).json({ message: 'Sauce ajoutée avec succès' });
+        })
+        .catch((error) => {
+            res.status(400).json({ error: error });
+        });
 };
 
 
@@ -63,6 +62,7 @@ exports.deleteSauce = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }));
 };
+
 
 exports.likeSauce = (req, res, next) => {
     switch (req.body.like) {

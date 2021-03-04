@@ -63,7 +63,6 @@ exports.deleteSauce = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-
 exports.likeSauce = (req, res, next) => {
     switch (req.body.like) {
         case -1:

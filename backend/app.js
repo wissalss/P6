@@ -2,17 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
-const dotenv = require('dotenv');
 
+require('dotenv').config();
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
 const app = express();
-
-dotenv.config({
-    path: './.env'
-});
 
 const mongoUrl = process.env.MONGOOSE_URL;
 mongoose.connect(mongoUrl)
